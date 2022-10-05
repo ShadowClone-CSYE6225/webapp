@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "start-test": "start-server-and-test http://localhost:3200"
   },
   "repository": {
@@ -24,6 +24,7 @@
     "mocha": "^10.0.0",
     "nodejs": "^0.0.0",
     "nodemon": "^2.0.20",
+    "pg": "^8.8.0",
     "should": "^13.2.3",
     "start-server-and-test": "^1.14.0",
     "supertest": "^6.2.4",
