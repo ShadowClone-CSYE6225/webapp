@@ -58,6 +58,8 @@ const createAccount = async (request, response)=>{
 
 const getAccount = async (request, response) =>{
     try{
+        const authheader = request.headers.authorization
+        console.log(authheader);
         const user = request.body;
         const isUserPresent = await serviceLayer.getUser(user);
        if(isUserPresent.length !==0){
