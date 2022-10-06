@@ -29,6 +29,7 @@ const createAccount = async (request, response)=>{
     // Validate user input
     if (!(user.username && user.password && user.first_name && user.last_name)) {
         response.status(400).send("All inputs are required");
+        return;
     }
 
     // check if user already exist
@@ -45,19 +46,9 @@ const createAccount = async (request, response)=>{
     const result = await serviceLayer.createNewAccount(user);
     
   
-      // Create token
-      const token = jwt.sign(
-        { user_id: user.id, email },
-        process.env.TOKEN_KEY,
-        {
-          expiresIn: "2h",
-        }
-      );
-      // save user token
-      user.token = token;
-  
-      // return new user
-      response.status(201).json(user);
+    response.status(201).json(result);
+
+ 
 
 
     }catch(error){
@@ -67,9 +58,14 @@ const createAccount = async (request, response)=>{
 
 const getAccount = async (request, response) =>{
     try{
-
-       const result =  await serviceLayer.getUser();
-        setSuccess(result, response);
+        const user = request.body;
+        const isUserPresent = await serviceLayer.getUser(user);
+       if(isUserPresent.length !==0){
+        setSuccess(isUserPresent , response);
+        return;
+       }
+    
+         setError( "userName not found", response);
     }catch(error){
 
     }
