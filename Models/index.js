@@ -13,15 +13,14 @@ const model = new Pool({
     port: process.env.PGPORT,
   });
 
-module.exports.getQuery = async function() {
+module.exports.getQuery = async function(username) {
     
-   return await model.query('SELECT * from accounts');
+   return await model.query(`SELECT id,first_name,last_name, username, account_created, account_updated from accounts WHERE username='${username}'`);
 }
 
 module.exports.createQuery = async function(newUser) {
     try{
         const query = `INSERT INTO accounts (first_name,last_name,"password", username, account_created) VALUES('${newUser.first_name}', '${newUser.last_name}', '${newUser.password}', '${newUser.username}', CURRENT_TIMESTAMP);`
-        console.log(query);
         model.connect();
         return model.query(query)
 

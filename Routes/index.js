@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.route("/healthz").get(getHealthz);
 router.route("/v1/account").post(createAccount);
-router.route('/getAccount').get(getAccount);
+router.route('/v1/account/').get(getAccount);
 
 module.exports= function(app) {
 app.use('/', router)
