@@ -1,7 +1,5 @@
 const routes = require('./Routes')
-const express= require('express');
-const { Client } = require('pg')
-const auth = require('./Middelware/auth');
+const express= require('express')
 
 
 const app=express();

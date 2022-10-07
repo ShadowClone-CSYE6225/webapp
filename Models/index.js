@@ -15,7 +15,12 @@ const model = new Pool({
 
 module.exports.getQuery = async function(username) {
     //id,first_name,last_name, username, account_created, account_updated
-   return await model.query(`SELECT * from accounts WHERE username='${username}'`);
+    try {
+        return await model.query(`SELECT * from accounts WHERE username='${username}'`);
+    } catch (error) {
+        return error
+    }
+   
 }
 
 module.exports.createQuery = async function(newUser) {
@@ -25,7 +30,7 @@ module.exports.createQuery = async function(newUser) {
         return model.query(query)
 
     }catch(error){
-        console.log(error);
+        return error
     }
 }
 

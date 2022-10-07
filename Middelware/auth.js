@@ -6,18 +6,17 @@ const { request } = require("express");
 async function auth (req, res, next){
 
     
-    var authHeader = req.headers.authorization;
+    let authHeader = req.headers.authorization;
     if(!authHeader){
-        var err = new Error('You are not authenticated')
-
+        let err = new Error('You are not authenticated')
         res.setHeader('WWW-Authenticate','Basic');
         err.status = 401
         next(err)
     }
 
-    var auth = new Buffer(authHeader.split(' ')[1], 'base64').toString().split(':')
-    var username = auth[0]
-    var password = auth[1]
+    let auth = new Buffer(authHeader.split(' ')[1], 'base64').toString().split(':')
+    let username = auth[0]
+    let password = auth[1]
 
     const isUserPresent = await serviceLayer.getUser(username);
     
@@ -25,7 +24,7 @@ async function auth (req, res, next){
         request.username = username;
         next();
     }else{
-        var err = new Error('You are not')
+        let err = new Error('You are not')
 
         res.setHeader('WWW-Authenticate','Basic');
         // res.json();

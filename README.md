@@ -14,16 +14,19 @@ More details will be added as course progresses.
    ````
 # Build and Run
 1. Clone the github repository on your local machine.
-   
-2. Run the below command to install all the package.
+2. You need to install Postgres database to run the application.
+
+   [POSTGRES LINK](https://www.postgresql.org/download/)
+3. After installing, you need to enter your connection details in index.js file inside Models folder.
+4. Run the below command to install all the package.
     ````
    npm install
     ````
-3. To Run the application, run below command.
+5. To Run the application, run below command.
    ````
    npm start
    ````
-4. To run unit tests, run below command.
+6. To run unit tests, run below command.
    ````
    npm test
    ````
@@ -36,4 +39,6 @@ In this assignment we are building one simple node.js application which only has
 # Assignment 2
 |Date|10/06|
 |-|-|
+
+In this assignment we are building secured and public urls to create, fetch, update user accounts. All the calls are giving proper HTTP response.
 
