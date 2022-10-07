@@ -1,6 +1,7 @@
 const routes = require('./Routes')
 const express= require('express');
 const { Client } = require('pg')
+const auth = require('./Middelware/auth');
 
 
 const app=express();
@@ -15,11 +16,6 @@ const PORT = process.env.PORT || 3200;
 
 
 
-
-
-
-
 routes(app);
 app.listen(PORT, ()=>{
-    console.log("Server is Running")
 })

@@ -30,6 +30,7 @@ More details will be added as course progresses.
 # Assignment 1
 |Date|09/29|
 |-|-|
+
 In this assignment we are building one simple node.js application which only has one GET API call, returns only status code of 200 or 500.
 
 # Assignment 2

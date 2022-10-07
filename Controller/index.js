@@ -1,4 +1,7 @@
 const serviceLayer = require("../Services")
+const bcrypt = require('bcryptjs');
+
+
 // Success method
 const setSuccess = (object, response) => {
     response.status(200);
@@ -33,17 +36,18 @@ const createAccount = async (request, response)=>{
     }
 
     // check if user already exist
-    // Validate if user exist in our database
-    // const oldUser = await User.findOne({ username });
+    const isUserPresent = await serviceLayer.getUser(user.username);
 
-    // if (oldUser) {
-    //   return res.status(409).send("User Already Exist. Please Login");
-    // }
-
+    if(isUserPresent.length > 0){
+        response.status(400).json("Email id already registered!");
+        return;
+    }
     
 
     // Create user in our database
-    const result = await serviceLayer.createNewAccount(user);
+    await serviceLayer.createNewAccount(user);
+    const result = await serviceLayer.getUser(user.username);
+    delete result[0].password;
     
   
     response.status(201).json(result);
@@ -53,24 +57,55 @@ const createAccount = async (request, response)=>{
 
     }catch(error){
 
+        setError(error, response.status(400))
+
     }
 }
 
 const getAccount = async (request, response) =>{
     try{
-        const authheader = request.headers.authorization
-        console.log(authheader);
+
         const user = request.body;
-        const isUserPresent = await serviceLayer.getUser(user);
+        const isUserPresent = await serviceLayer.getUser(user.username);
        if(isUserPresent.length !==0){
-        setSuccess(isUserPresent , response);
-        return;
+        const isAuthenticated = bcrypt.compare(request.body.password, isUserPresent[0].password);
+
+        if(isAuthenticated){
+            delete isUserPresent[0].password
+            setSuccess(isUserPresent[0], response)
+           
+        }else {
+
+            response.status(400).json({ error: "password doesn't match" });
        }
-    
-         setError( "userName not found", response);
+        }else{
+            response.status(400).json({ error: "User doesn't exist" });
+        }
+        
+         
     }catch(error){
 
     }
 
 }
-module.exports = {getHealthz, createAccount,getAccount }
+
+const updateAccount = async(request, response)=>{
+    if(request.body.username || request.body.account_created || request.body.account_updated || request.body.id){
+        response.status(400).json("You are not allowed to edit few details in body")
+        
+    }else{
+
+    const result = await serviceLayer.updateUser(request.username, request.body)
+    if(result ===1){
+        const user =  await serviceLayer.getUser(request.username);
+
+        delete user[0].password
+        setSuccess(user[0], response)
+        return;
+    }
+    
+}
+}
+
+
+module.exports = {getHealthz, createAccount,getAccount, updateAccount }
