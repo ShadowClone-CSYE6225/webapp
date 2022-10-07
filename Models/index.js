@@ -14,8 +14,8 @@ const model = new Pool({
   });
 
 module.exports.getQuery = async function(username) {
-    
-   return await model.query(`SELECT id,first_name,last_name, username, account_created, account_updated from accounts WHERE username='${username}'`);
+    //id,first_name,last_name, username, account_created, account_updated
+   return await model.query(`SELECT * from accounts WHERE username='${username}'`);
 }
 
 module.exports.createQuery = async function(newUser) {
@@ -26,5 +26,22 @@ module.exports.createQuery = async function(newUser) {
 
     }catch(error){
         console.log(error);
+    }
+}
+
+module.exports.updateQuery = async function(username,updatedData){
+
+    try{
+        let query = `UPDATE ACCOUNTS SET `;
+        for(const key in updatedData){
+            query+=`${key} = '${updatedData[key]}', `
+        }
+        query+=`account_updated = NOW() WHERE username='${username}'`
+
+        model.connect();
+        return (await model.query(query)).rowCount;
+    }catch(error){
+        return error
+
     }
 }
