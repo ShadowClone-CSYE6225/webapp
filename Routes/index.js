@@ -11,6 +11,7 @@ router.route("/v1/account").post(createAccount);
 module.exports= function(app) {
     
 app.use('/', router)
+//Below routes are authenticated with BASIC authentication
 app.get('/v1/account/', auth, getAccount);
 app.put('/v1/account', auth, updateAccount )
 

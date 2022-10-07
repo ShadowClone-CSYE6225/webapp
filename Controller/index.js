@@ -35,9 +35,8 @@ const createAccount = async (request, response)=>{
         return;
     }
 
-    // check if user already exist
+    // check if user already exist return error with response code
     const isUserPresent = await serviceLayer.getUser(user.username);
-
     if(isUserPresent.length > 0){
         response.status(400).json("Email id already registered!");
         return;
@@ -49,11 +48,7 @@ const createAccount = async (request, response)=>{
     const result = await serviceLayer.getUser(user.username);
     delete result[0].password;
     
-  
     response.status(201).json(result);
-
- 
-
 
     }catch(error){
 
@@ -84,12 +79,14 @@ const getAccount = async (request, response) =>{
         
          
     }catch(error){
-
+        setError(error, response)
     }
 
 }
 
 const updateAccount = async(request, response)=>{
+
+    
     if(request.body.username || request.body.account_created || request.body.account_updated || request.body.id){
         response.status(400).json("You are not allowed to edit few details in body")
         

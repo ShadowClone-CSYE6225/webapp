@@ -12,15 +12,11 @@ module.exports.createNewAccount = async function createNewAccount(newUser){
 
    
     //Encrypt user password
-   
-   newUser.password =  await bcrypt.hash(newUser.password, 2);
-  
+    newUser.password =  await bcrypt.hash(newUser.password, 2);
+    
     const result = await databaseModel.createQuery(newUser);
-    if(result.rowCount === 1){
-        
-
-        return newUser
-    } 
+    if(result.rowCount === 1) return newUser
+   
     
 
 }
