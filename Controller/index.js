@@ -36,7 +36,7 @@ const createAccount = async (request, response)=>{
     }
 
     // check if user already exist return error with response code
-    const isUserPresent = await serviceLayer.getUser(user.username);
+    const isUserPresent = await serviceLayer.getUserByUsername(user.username);
     if(isUserPresent.length > 0){
         response.status(400).json("Email id already registered!");
         return;
@@ -45,7 +45,7 @@ const createAccount = async (request, response)=>{
 
     // Create user in our database
     await serviceLayer.createNewAccount(user);
-    const result = await serviceLayer.getUser(user.username);
+    const result = await serviceLayer.getUserByUsername(user.username);
     delete result[0].password;
     
     response.status(201).json(result);
@@ -59,19 +59,19 @@ const createAccount = async (request, response)=>{
 
 const getAccount = async (request, response) =>{
     try{
-
-        const user = request.body;
-        const isUserPresent = await serviceLayer.getUser(user.username);
+        //Getting this username from AUth file.
+        const username = request.username;
+        const isUserPresent = await serviceLayer.getUser(request.params.accountId);
        if(isUserPresent.length !==0){
-        const isAuthenticated = bcrypt.compare(request.body.password, isUserPresent[0].password);
-
+        const isAuthenticated = username === isUserPresent[0].username; 
+        
         if(isAuthenticated){
             delete isUserPresent[0].password
             setSuccess(isUserPresent[0], response)
            
         }else {
 
-            response.status(400).json({ error: "password doesn't match" });
+            response.status(400).json({ error: "Username and Id doesn't match" });
        }
         }else{
             response.status(400).json({ error: "User doesn't exist" });
@@ -92,14 +92,30 @@ const updateAccount = async(request, response)=>{
         
     }else{
 
-    const result = await serviceLayer.updateUser(request.username, request.body)
-    if(result ===1){
-        const user =  await serviceLayer.getUser(request.username);
 
-        delete user[0].password
-        setSuccess(user[0], response)
-        return;
-    }
+        //Getting this username from AUth file.
+        const username = request.username;
+
+
+        const isUserPresent = await serviceLayer.getUser(request.params.accountId);
+        if(isUserPresent.length !==0){
+          const isAuthenticated = username === isUserPresent[0].username; 
+          
+          if(isAuthenticated){
+
+            const result = await serviceLayer.updateUser(request.params.accountId, request.body)
+            if(result ===1){
+                const user =  await serviceLayer.getUser(request.params.accountId);
+        
+                delete user[0].password
+                setSuccess(user[0], response)
+                return;
+            }
+
+          }
+        }
+    
+   
     
 }
 }

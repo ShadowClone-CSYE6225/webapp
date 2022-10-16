@@ -18,7 +18,7 @@ async function auth (req, res, next){
     let username = auth[0]
     let password = auth[1]
 
-    const isUserPresent = await serviceLayer.getUser(username);
+    const isUserPresent = await serviceLayer.getUserByUsername(username);
     
     if((username === isUserPresent[0]?.username) && await bcrypt.compare(password, isUserPresent[0]?.password)){
         request.username = username;

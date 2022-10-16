@@ -21,18 +21,25 @@ module.exports.createNewAccount = async function createNewAccount(newUser){
 
 }
 
-module.exports.getUser = async function getUserDetails(username){
+module.exports.getUser = async function getUserDetails(accountId){
+    
 
- const result = await databaseModel.getQuery(username);    
+ const result = await databaseModel.getQuery(accountId);   
+ console.log(result);
 return result.rows || null;
 }
 
-module.exports.updateUser = async function(username, updatedData){
+module.exports.getUserByUsername = async function getUseDetailsByUsername(username){
+    const result = await databaseModel.getQueryByUsername(username);    
+    return result.rows || null;   
+}
+
+module.exports.updateUser = async function(accountId, updatedData){
     if(updatedData.password){
         updatedData.password = await bcrypt.hash(updatedData.password, 2);
     }
 
 
-    const result = await databaseModel.updateQuery(username, updatedData)
+    const result = await databaseModel.updateQuery(accountId, updatedData)
     return result;
 }
