@@ -12,7 +12,7 @@ module.exports= function(app) {
     
 app.use('/', router)
 //Below routes are authenticated with BASIC authentication
-app.get('/v1/account/', auth, getAccount);
-app.put('/v1/account', auth, updateAccount )
+app.get('/v1/account/:accountId', auth, getAccount);
+app.put('/v1/account/:accountId', auth, updateAccount )
 
 }

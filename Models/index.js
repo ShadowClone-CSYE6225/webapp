@@ -13,7 +13,17 @@ const model = new Pool({
     port: process.env.PGPORT,
   });
 
-module.exports.getQuery = async function(username) {
+module.exports.getQuery = async function(accountId) {
+    //id,first_name,last_name, username, account_created, account_updated
+    try {
+        return await model.query(`SELECT * from accounts WHERE id=${accountId}`);
+    } catch (error) {
+        return error
+    }
+   
+}
+
+module.exports.getQueryByUsername = async function(username) {
     //id,first_name,last_name, username, account_created, account_updated
     try {
         return await model.query(`SELECT * from accounts WHERE username='${username}'`);
@@ -34,14 +44,14 @@ module.exports.createQuery = async function(newUser) {
     }
 }
 
-module.exports.updateQuery = async function(username,updatedData){
+module.exports.updateQuery = async function(accountId,updatedData){
 
     try{
         let query = `UPDATE ACCOUNTS SET `;
         for(const key in updatedData){
             query+=`${key} = '${updatedData[key]}', `
         }
-        query+=`account_updated = NOW() WHERE username='${username}'`
+        query+=`account_updated = NOW() WHERE id=${accountId}`
 
         model.connect();
         return (await model.query(query)).rowCount;

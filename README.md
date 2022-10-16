@@ -40,5 +40,5 @@ In this assignment we are building one simple node.js application which only has
 |Date|10/06|
 |-|-|
 
-In this assignment we are building secured and public urls to create, fetch, update user accounts. All the calls are giving proper HTTP response.
+In this assignment we are building secured and public urls to create, fetch, update user accounts. All the calls are giving proper HTTP response code.
 
