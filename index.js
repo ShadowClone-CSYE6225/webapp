@@ -1,16 +1,6 @@
 const routes = require('./Routes')
 const express= require('express')
-const dotenv = require('dotenv');
-dotenv.config();
-const { Sequelize, Model, DataTypes } = require('sequelize');
 
-const sequelize = new Sequelize(process.env.PGDATABASE, process.env.PGUSER, process.env.PGPASSWORD, {
-    host:process.env.PGHOST,
-    port: process.env.PGPORT,
-    dialect: 'postgres',
-    logging: false
-  })
-  
 
 
 const app=express();
