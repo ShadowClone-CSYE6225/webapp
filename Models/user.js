@@ -44,12 +44,14 @@ const Data = new Date();
     },
     account_created: {
         type: 'TIMESTAMP',
-        allowNull: false,
-        default: Data,
+        default: Data
     },
     account_updated: {
-        type: 'TIMESTAMP'
+        type: 'TIMESTAMP',
+        allowNull: true
     },
+ },{
+    timestamps: false
  });
 
 
