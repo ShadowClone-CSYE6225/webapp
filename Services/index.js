@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 dotenv.config();
 const databaseModel = require('../Models')
+const s3 = require('../Config/s3')
 
 
 module.exports.getHealthzDetails = function getHealthzDetails(){
@@ -42,4 +43,24 @@ module.exports.updateUser = async function(accountId, updatedData){
 
     const result = await databaseModel.updateQuery(accountId, updatedData)
     return result;
+}
+
+module.exports.uploadDocument = (file)=>{
+    const params = {
+        Bucket: s3.bucket_name,
+        Key: file.originalname.replace(/\s+/g, "-"),    // replace space in a filename with hyphen
+        Body: file.buffer
+    };
+
+        s3.client.upload(params, (error, data) => {
+        if (error) {
+            return error;
+
+        }
+            return data.Location;
+        
+
+
+        
+    });
 }
