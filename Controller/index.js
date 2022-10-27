@@ -1,5 +1,5 @@
 const serviceLayer = require("../Services")
-const bcrypt = require('bcryptjs');
+const s3 = require('../s3')
 
 
 // Success method
@@ -120,5 +120,31 @@ const updateAccount = async(request, response)=>{
 }
 }
 
+const uploadDocument= async(request, response)=>{
+    if(!request.file){
+        response.status(400).json({error: "Please select a file to upload"});
+    }
 
-module.exports = {getHealthz, createAccount,getAccount, updateAccount }
+    const params = {
+        Bucket: s3.bucket_name,
+        Key: request.file.originalname.replace(/\s+/g, "-"),    // replace space in a filename with hyphen
+        Body: request.file.buffer
+    };
+
+    console.log('Starting file upload op');
+    s3.client.upload(params, (error, data) => {
+        if (error) {
+            // console.log(err);
+            response.status(500).json({ error: 'Error while uploading file' });
+            return;
+        }
+            response.status(201).json({
+                message: 'File uploaded successfully',
+                object_url: `${data.Location}`
+            });
+        
+    });
+}
+
+
+module.exports = {getHealthz, createAccount,getAccount, updateAccount, uploadDocument }

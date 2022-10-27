@@ -1,6 +1,7 @@
-const {getHealthz, createAccount,getAccount, updateAccount } =  require('../Controller')
+const {getHealthz, createAccount,getAccount, updateAccount, uploadDocument } =  require('../Controller')
 
 const express = require("express");
+const upload = require('../Middelware/multer');
 const auth = require('../Middelware/auth');
 const router = express.Router();
 
@@ -13,6 +14,11 @@ module.exports= function(app) {
 app.use('/', router)
 //Below routes are authenticated with BASIC authentication
 app.get('/v1/account/:accountId', auth, getAccount);
-app.put('/v1/account/:accountId', auth, updateAccount )
+app.put('/v1/account/:accountId', auth, updateAccount)
+app.get('/v1/documents/:documentId', auth)
+app.post('/v1/documents/', upload.single('test'), auth, uploadDocument)
+app.delete('/v1/documents/:documentId', auth)
+app.get('/v1/documents/', auth)
+
 
 }
