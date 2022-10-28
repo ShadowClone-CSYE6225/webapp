@@ -32,7 +32,7 @@ build {
   ]
 
   provisioner "file" {
-    source      = "../webapp.tar"
+    source      = "./webapp.tar"
     destination = "/tmp/webapp.tar"
   }
 
