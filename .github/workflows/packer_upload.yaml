@@ -24,7 +24,7 @@ jobs:
         uses: hashicorp/packer-github-actions@master
         with:
           command: init
-          target: aws-ubuntu.pkr.hcl
+          target: ../Packer_Template/aws-ubuntu.pkr.hcl
 
       # validate templates
       - name: Validate Template
@@ -32,7 +32,7 @@ jobs:
         with:
           command: validate
           arguments: -syntax-only
-          target: aws-ubuntu.pkr.hcl
+          target: ../Packer_Template/aws-ubuntu.pkr.hcl
 
       # build artifact
       - name: Build Artifact
@@ -40,7 +40,7 @@ jobs:
         with:
           command: build
           arguments: "-color=false -on-error=abort"
-          target: aws-ubuntu.pkr.hcl
+          target: ../Packer_Template/aws-ubuntu.pkr.hcl
         env:
           PACKER_LOG: 1
         
