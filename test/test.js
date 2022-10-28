@@ -6,7 +6,7 @@ dotenv.config();
 
 // This agent refers to PORT where program is runninng.
 const PORT = process.env.PORT || 3200
-var server = supertest.agent(`http://127.0.0.1:${PORT}`);
+var server = supertest.agent(`http://localhost:${PORT}`);
 
 
 // UNIT test begin
