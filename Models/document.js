@@ -42,7 +42,7 @@ const Data = new Date();
         type: 'TIMESTAMP',
         default: Data
    
- },{
+ }},{
     timestamps: false
  });
 
