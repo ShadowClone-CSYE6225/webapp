@@ -39,7 +39,7 @@ module.exports.createQuery = async function(newUser) {
 
         const query = `INSERT INTO accounts (first_name,last_name,"password", username, account_created) VALUES('${newUser.first_name}', '${newUser.last_name}', '${newUser.password}', '${newUser.username}', CURRENT_TIMESTAMP);`
         model.connect();
-        return model.query(query)
+        return await model.query(query)
 
     }catch(error){
         return error
@@ -68,7 +68,7 @@ module.exports.createDocumentQuery = async function(fileDetails, username){
     try{
         let query = `INSERT INTO \"Documents\" (user_id, name, s3_bucket_path, date_created) VALUES('${username}', '${fileDetails.fileName}', '${fileDetails.filePath}' , CURRENT_TIMESTAMP);`
         model.connect();
-        return model.query(query)
+        return await model.query(query)
 
 
     }catch(error){
@@ -117,7 +117,7 @@ module.exports.checkDocumentExists = async function(documentName, username){
 
         let query = `SELECT * FROM \"Documents\" WHERE name='${documentName}' AND user_id = '${username}';`
         model.connect();
-        return (await (await model.query(query)).rowCount)
+        return (await model.query(query)).rowCount
 
     }catch(error){
         return error
