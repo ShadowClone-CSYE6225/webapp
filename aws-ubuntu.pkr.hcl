@@ -38,27 +38,27 @@ build {
 
   provisioner "shell" {
     inline = [
-      "echo Installing postgres",
+      "echo Installing Software",
       "sleep 30",
       "sudo apt-get update",
       "sudo apt-get install -y curl",
-      // "sudo apt-get -y install postgresql",
+      "sudo apt-get -y install postgresql",
       "curl -sL https://deb.nodesource.com/setup_16.x | sudo bash -",
       "sudo apt-get install -y nodejs",
-      "sudo npm install -g pm2",
+      // "sudo npm install -g pm2",
       "mkdir -p ~/Application/",
       "mv /tmp/webapp.tar ~/Application/",
       "cd ~/Application",
       "tar -xvf webapp.tar",
       "cd webapp",
-      "npm install",
+      "npm install"
       // "sudo -u postgres psql  -c \"ALTER USER postgres PASSWORD 'admin'\"",
-      "sudo pm2 start ./Models/documents.js",
-      "sudo pm2 start ./Models/user.js",
-      "sudo pm2 start index.js",
-      "sudo pm2 startup systemd",
-      "sudo pm2 save",
-      "sudo pm2 list"
+      // "sudo pm2 start ./Models/document.js",
+      // "sudo pm2 start ./Models/user.js",
+      // "sudo pm2 start index.js",
+      // "sudo pm2 startup systemd",
+      // "sudo pm2 save",
+      // "sudo pm2 list"
 
     ]
   }

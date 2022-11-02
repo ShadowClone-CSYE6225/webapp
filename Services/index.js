@@ -44,8 +44,9 @@ module.exports.updateUser = async function(accountId, updatedData){
 }
 
 module.exports.uploadDocument = async(file, username)=>{
-    const fileName = file.originalname.replace(/\s+/g, "-")
+    let fileName = file.originalname.replace(/\s+/g, "-")
 
+    fileName =  `${username}` + fileName ;
 
 
     const fileExists = await databaseModel.checkDocumentExists(fileName, username);
