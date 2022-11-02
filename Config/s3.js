@@ -8,7 +8,7 @@ const client = new AWS.S3({
  
 const s3 = {
     client: client,
-    bucket_name:"pratiktalrejatestbucket"
+    bucket_name:process.env.S3BUCKET || "pratiktalrejatestbucket"
 };
  
 module.exports = s3;
