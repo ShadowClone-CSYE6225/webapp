@@ -8,6 +8,8 @@ dotenv.config();
 const PORT = process.env.PORT || 3200
 var server = supertest.agent(`http://localhost:${PORT}`);
 
+console.log(PORT);
+
 
 // UNIT test begin
 
