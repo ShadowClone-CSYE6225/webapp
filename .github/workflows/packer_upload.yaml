@@ -1,45 +1,5 @@
 name: Run packer build on a template file
 
-on:
-  pull_request:
-    branches: [main]
-  
-  workflow_dispatch:
-
-jobs:
-  packer_build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Packer validate
-        uses: actions/checkout@v3
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
-      
-      # Initialize Packer templates
-      - name: Initialize Packer Template
-        uses: hashicorp/packer-github-actions@master
-        with:
-          command: init
-          target: aws-ubuntu.pkr.hcl
-
-      # validate templates
-      - name: Validate Template
-        uses: hashicorp/packer-github-actions@master
-        with:
-          command: validate
-          arguments: -syntax-only
-          target: aws-ubuntu.pkr.hcl
-      
-
-
-
-
 on: 
   push:
     branches:
