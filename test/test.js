@@ -26,7 +26,7 @@ describe("SAMPLE unit test",function(){
     .expect(200) // THis is HTTP response
     .end(function(err,response){
       // HTTP status should be 200
-      response.status.should.equal(200);
+      if (err) return done(err)
       done();
     });
   });
