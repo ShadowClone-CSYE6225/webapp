@@ -1,14 +1,14 @@
 const supertest = require("supertest");
 const should = require("should");
 const dotenv = require('dotenv');
+const app = require("../index");
   
 dotenv.config();
 
 // This agent refers to PORT where program is runninng.
 const PORT = process.env.PORT || 3200
-var server = supertest.agent(`http://localhost:${PORT}`);
+var server = supertest.agent(app);
 
-console.log(PORT);
 
 
 // UNIT test begin
