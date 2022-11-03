@@ -20,6 +20,21 @@ jobs:
 
       
       
+      # Initialize Packer templates
+      - name: Initialize Packer Template
+        uses: hashicorp/packer-github-actions@master
+        with:
+          command: init
+          target: aws-ubuntu.pkr.hcl
+
+      # validate templates
+      - name: Validate Template
+        uses: hashicorp/packer-github-actions@master
+        with:
+          command: validate
+          arguments: -syntax-only
+          target: aws-ubuntu.pkr.hcl
+      
 
       # build artifact
       - name: Build Artifact
