@@ -93,7 +93,7 @@ module.exports.deleteDocument = async(documentId, username) =>{
 
 
     const data = await databaseModel.getSingleDocument(documentId, username);
-    const params = {  Bucket: 'pratiktalrejatestbucket', Key: `${data[0].name}` };
+    const params = {  Bucket: process.env.S3BUCKET, Key: `${data[0].name}` };
     
     
     s3.client.deleteObject(params, function(error, data) {
