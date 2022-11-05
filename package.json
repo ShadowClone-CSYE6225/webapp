@@ -4,7 +4,7 @@
   "description": "Assignment 1 ",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --recursive --exit",
     "start": "nodemon index.js",
     "start-test": "start-server-and-test http://localhost:3200"
   },
