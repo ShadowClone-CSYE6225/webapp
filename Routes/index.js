@@ -1,4 +1,4 @@
-const {getHealthz, createAccount,getAccount, updateAccount, uploadDocument } =  require('../Controller')
+const {getHealthz, createAccount,getAccount, updateAccount, uploadDocument, getAllDocuments, getDocument, deleteDocument } =  require('../Controller')
 
 const express = require("express");
 const upload = require('../Middelware/multer');
@@ -15,10 +15,10 @@ app.use('/', router)
 //Below routes are authenticated with BASIC authentication
 app.get('/v1/account/:accountId', auth, getAccount);
 app.put('/v1/account/:accountId', auth, updateAccount)
-app.get('/v1/documents/:documentId', auth)
+app.get('/v1/documents/:documentId', auth, getDocument)
 app.post('/v1/documents/', upload.single('test'), auth, uploadDocument)
-app.delete('/v1/documents/:documentId', auth)
-app.get('/v1/documents/', auth)
+app.delete('/v1/documents/:documentId', auth, deleteDocument)
+app.get('/v1/documents/', auth, getAllDocuments)
 
 
 }

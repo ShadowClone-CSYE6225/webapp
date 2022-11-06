@@ -1,12 +1,14 @@
 const supertest = require("supertest");
 const should = require("should");
 const dotenv = require('dotenv');
+const app = require("../index");
   
 dotenv.config();
 
 // This agent refers to PORT where program is runninng.
 const PORT = process.env.PORT || 3200
-var server = supertest.agent(`http://localhost:${PORT}`);
+var server = supertest.agent(app);
+
 
 
 // UNIT test begin
@@ -24,7 +26,7 @@ describe("SAMPLE unit test",function(){
     .expect(200) // THis is HTTP response
     .end(function(err,response){
       // HTTP status should be 200
-      response.status.should.equal(200);
+      if (err) return done(err)
       done();
     });
   });

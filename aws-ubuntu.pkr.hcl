@@ -38,7 +38,7 @@ build {
 
   provisioner "shell" {
     inline = [
-      "echo Installing postgres",
+      "echo Installing Software",
       "sleep 30",
       "sudo apt-get update",
       "sudo apt-get install -y curl",
@@ -51,13 +51,14 @@ build {
       "cd ~/Application",
       "tar -xvf webapp.tar",
       "cd webapp",
-      "npm install",
-      "sudo -u postgres psql  -c \"ALTER USER postgres PASSWORD 'admin'\"",
-      "sudo pm2 start ./Models/user.js",
-      "sudo pm2 start index.js",
-      "sudo pm2 startup systemd",
-      "sudo pm2 save",
-      "sudo pm2 list"
+      "npm install"
+      // "sudo -u postgres psql  -c \"ALTER USER postgres PASSWORD 'admin'\"",
+      // "sudo pm2 start ./Models/document.js",
+      // "sudo pm2 start ./Models/user.js",
+      // "sudo pm2 start index.js",
+      // "sudo pm2 startup systemd",
+      // "sudo pm2 save",
+      // "sudo pm2 list"
 
     ]
   }

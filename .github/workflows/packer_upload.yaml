@@ -1,6 +1,6 @@
 name: Run packer build on a template file
 
-on:
+on: 
   push:
     branches:
         - 'main'
@@ -19,6 +19,7 @@ jobs:
           aws-region: us-east-1
 
       
+      
       # Initialize Packer templates
       - name: Initialize Packer Template
         uses: hashicorp/packer-github-actions@master
@@ -33,6 +34,7 @@ jobs:
           command: validate
           arguments: -syntax-only
           target: aws-ubuntu.pkr.hcl
+      
 
       # build artifact
       - name: Build Artifact

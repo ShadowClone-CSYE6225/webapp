@@ -36,9 +36,10 @@ module.exports.getQueryByUsername = async function(username) {
 
 module.exports.createQuery = async function(newUser) {
     try{
+
         const query = `INSERT INTO accounts (first_name,last_name,"password", username, account_created) VALUES('${newUser.first_name}', '${newUser.last_name}', '${newUser.password}', '${newUser.username}', CURRENT_TIMESTAMP);`
         model.connect();
-        return model.query(query)
+        return await model.query(query)
 
     }catch(error){
         return error
@@ -59,5 +60,66 @@ module.exports.updateQuery = async function(accountId,updatedData){
     }catch(error){
         return error
 
+    }
+}
+
+
+module.exports.createDocumentQuery = async function(fileDetails, username){
+    try{
+        let query = `INSERT INTO \"Documents\" (user_id, name, s3_bucket_path, date_created) VALUES('${username}', '${fileDetails.fileName}', '${fileDetails.filePath}' , CURRENT_TIMESTAMP);`
+        model.connect();
+        return await model.query(query)
+
+
+    }catch(error){
+        return error
+    }
+}
+
+module.exports.getSingleDocument = async function(documentId, username){
+    try{
+        let query = `SELECT * FROM \"Documents\" WHERE user_id='${username}' AND doc_id='${documentId}'; `
+        model.connect();
+        return (await model.query(query)).rows
+
+
+    }catch(error){
+        return error
+    }
+}
+
+module.exports.getAllDocumentsByAUser = async function(username){
+    try{
+        let query = `SELECT * FROM \"Documents\" WHERE user_id='${username}'; `
+        model.connect();
+        return (await model.query(query)).rows;
+
+
+    }catch(error){
+        return error
+    }
+}
+
+module.exports.deleteDocument = async function(documentId, username){
+    try{
+        let query = `DELETE FROM \"Documents\" WHERE user_id='${username}' AND doc_id=${documentId};`
+        model.connect();
+        return ( (await model.query(query)).rowCount)
+
+
+    }catch(error){
+        return error    
+    }
+}
+
+module.exports.checkDocumentExists = async function(documentName, username){
+    try{
+
+        let query = `SELECT * FROM \"Documents\" WHERE name='${documentName}' AND user_id = '${username}';`
+        model.connect();
+        return (await model.query(query)).rowCount
+
+    }catch(error){
+        return error
     }
 }

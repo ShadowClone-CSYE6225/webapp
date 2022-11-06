@@ -121,12 +121,37 @@ const updateAccount = async(request, response)=>{
 }
 
 const uploadDocument= async(request, response)=>{
+    try{
     if(!request.file){
         response.status(400).json({error: "Please select a file to upload"});
     }
-    console.log(serviceLayer.uploadDocument(request.file));
-    response.status(500).json({ error: 'Error while uploading file' });
+    const result = await (serviceLayer.uploadDocument(request.file, request.username));
+
+    response.status(201).json(result);
+}catch(error){
+    response.status(400)
+}
 }
 
 
-module.exports = {getHealthz, createAccount,getAccount, updateAccount, uploadDocument }
+const getAllDocuments = async (request, response) =>{
+
+    const result = await(serviceLayer.getAllDocuments(request.username));
+    response.status(200).json(result);
+}
+
+const getDocument = async (request,response) =>{
+
+    const result = await(serviceLayer.getDocument(request.params.documentId, request.username));
+    response.status(200).json(result);
+
+}
+
+const deleteDocument= async (request, response) =>{
+    const result = await(serviceLayer.deleteDocument(request.params.documentId, request.username));
+    response.status(201).json(result);
+
+}
+
+
+module.exports = {getHealthz, createAccount,getAccount, updateAccount, uploadDocument, getAllDocuments, getDocument,deleteDocument }
