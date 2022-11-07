@@ -32,7 +32,7 @@ build {
   ]
 
   provisioner "file" {
-    source      = "${{ github.workspace }}/webapp.zip"
+    source      = "../webapp.zip"
     destination = "/tmp/webapp.zip"
   }
 
