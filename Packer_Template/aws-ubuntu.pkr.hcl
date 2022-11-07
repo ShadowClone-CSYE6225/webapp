@@ -52,6 +52,7 @@ build {
       "cd ~/Application",
       "unzip webapp.zip -d webapp",
       "cd webapp",
+      "ls",
       "npm install"
       // "sudo -u postgres psql  -c \"ALTER USER postgres PASSWORD 'admin'\"",
       // "sudo pm2 start ./Models/document.js",
