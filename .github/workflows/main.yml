@@ -5,6 +5,7 @@ name: CI
 
 env:
   CI: true
+  GITHUB_REPO_PATH: ${{ github.workspace }}
 
 # Controls when the workflow will run
 on:

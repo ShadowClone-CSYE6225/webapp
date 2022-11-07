@@ -1,5 +1,9 @@
 name: Run packer build on a template file
 
+env:
+  CI: true
+  GITHUB_REPO_PATH: ${{ github.workspace }}
+
 on: 
   push:
     branches:
@@ -19,13 +23,19 @@ jobs:
           aws-region: us-east-1
 
       
+      #Compressing the repository
+      - name: Zip the repository
+        run: zip -r webapp.zip
+
+
+
       
       # Initialize Packer templates
       - name: Initialize Packer Template
         uses: hashicorp/packer-github-actions@master
         with:
           command: init
-          target: aws-ubuntu.pkr.hcl
+          target: ${{ github.workspace }}/Packer_Template/aws-ubuntu.pkr.hcl
 
       # validate templates
       - name: Validate Template
@@ -33,7 +43,7 @@ jobs:
         with:
           command: validate
           arguments: -syntax-only
-          target: aws-ubuntu.pkr.hcl
+          target: ${{ github.workspace }}/Packer_Template/aws-ubuntu.pkr.hcl
       
 
       # build artifact
@@ -42,7 +52,7 @@ jobs:
         with:
           command: build
           arguments: "-color=false -on-error=abort"
-          target: aws-ubuntu.pkr.hcl
+          target: ${{ github.workspace }}/Packer_Template/aws-ubuntu.pkr.hcl
         env:
           PACKER_LOG: 1
         
