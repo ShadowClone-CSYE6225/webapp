@@ -25,7 +25,7 @@ jobs:
       
       #Compressing the repository
       - name: Zip the repository
-        run: zip -r webapp.zip
+        run: zip -r webapp.zip ${{ github.workspace }}
 
 
 
