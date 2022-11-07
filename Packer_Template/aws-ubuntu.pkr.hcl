@@ -32,8 +32,8 @@ build {
   ]
 
   provisioner "file" {
-    source      = "./webapp.tar"
-    destination = "/tmp/webapp.tar"
+    source      = "${{ github.workspace }}/webapp.zip"
+    destination = "/tmp/webapp.zip"
   }
 
   provisioner "shell" {
@@ -42,14 +42,15 @@ build {
       "sleep 30",
       "sudo apt-get update",
       "sudo apt-get install -y curl",
+      "sudo apt-get install zip unzip",
       "sudo apt-get -y install postgresql",
       "curl -sL https://deb.nodesource.com/setup_16.x | sudo bash -",
       "sudo apt-get install -y nodejs",
       "sudo npm install -g pm2",
       "mkdir -p ~/Application/",
-      "mv /tmp/webapp.tar ~/Application/",
+      "mv /tmp/webapp.zip ~/Application/",
       "cd ~/Application",
-      "tar -xvf webapp.tar",
+      "unzip webapp.zip",
       "cd webapp",
       "npm install"
       // "sudo -u postgres psql  -c \"ALTER USER postgres PASSWORD 'admin'\"",
