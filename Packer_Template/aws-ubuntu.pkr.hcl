@@ -50,7 +50,7 @@ build {
       "mkdir -p ~/Application/",
       "mv /tmp/webapp.zip ~/Application/",
       "cd ~/Application",
-      "unzip webapp.zip",
+      "unzip webapp.zip -d webapp",
       "cd webapp",
       "npm install"
       // "sudo -u postgres psql  -c \"ALTER USER postgres PASSWORD 'admin'\"",
