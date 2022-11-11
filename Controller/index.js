@@ -1,5 +1,6 @@
 const serviceLayer = require("../Services")
-const s3 = require('../Config/s3')
+const logger = require('../Config/CloudWatch')
+
 
 
 // Success method
@@ -14,10 +15,14 @@ const setError = (error, response) => {
     response.json(error);
 };
 
-const getHealthz = async (request, response) =>{
+const getHealthz = async (request, response, next) =>{
     try{
+        console.log("Hello")
         const health =await serviceLayer.getHealthzDetails();
-        setSuccess(health, response);
+        console.log(health);
+        logger.log('info', `Requesting ${request.method} ${request.originalUrl}`, {tags: 'http', additionalInfo: {body: request.body, headers: request.headers }});   
+        
+        setSuccess(health, response); 
     }catch(error){
         setError(error, response)
     }

@@ -34,6 +34,8 @@
     "should": "^13.2.3",
     "start-server-and-test": "^1.14.0",
     "supertest": "^6.2.4",
-    "wait-on": "^6.0.1"
+    "wait-on": "^6.0.1",
+    "winston": "^3.8.2",
+    "winston-cloudwatch": "^6.1.1"
   }
 }
