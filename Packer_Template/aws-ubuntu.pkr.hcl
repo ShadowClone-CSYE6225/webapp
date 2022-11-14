@@ -55,7 +55,12 @@ build {
       "unzip webapp.zip -d webapp",
       "cd webapp",
       "ls",
-      "npm install"
+      "npm install",
+      "sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+      -a fetch-config \
+      -m ec2 \
+      -c file:/home/ubuntu/Application/webapp/Config/CloudWatchAgent.json \
+      -s"
       // "sudo -u postgres psql  -c \"ALTER USER postgres PASSWORD 'admin'\"",
       // "sudo pm2 start ./Models/document.js",
       // "sudo pm2 start ./Models/user.js",

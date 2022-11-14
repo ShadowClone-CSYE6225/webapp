@@ -1,5 +1,5 @@
 const serviceLayer = require("../Services")
-const logger = require('../Config/CloudWatch')
+const logger = require('../Config/Logger')
 
 
 
@@ -17,13 +17,12 @@ const setError = (error, response) => {
 
 const getHealthz = async (request, response, next) =>{
     try{
-        console.log("Hello")
         const health =await serviceLayer.getHealthzDetails();
-        console.log(health);
-        logger.log('info', `Requesting ${request.method} ${request.originalUrl}`, {tags: 'http', additionalInfo: {body: request.body, headers: request.headers }});   
+        logger.log('info: Health Check working fine.', health);   
         
         setSuccess(health, response); 
     }catch(error){
+        logger.error(error);
         setError(error, response)
     }
 }
@@ -43,6 +42,7 @@ const createAccount = async (request, response)=>{
     // check if user already exist return error with response code
     const isUserPresent = await serviceLayer.getUserByUsername(user.username);
     if(isUserPresent.length > 0){
+        logger.error("Email id Already used: ", user.username)
         response.status(400).json("Email id already registered!");
         return;
     }
@@ -52,11 +52,11 @@ const createAccount = async (request, response)=>{
     await serviceLayer.createNewAccount(user);
     const result = await serviceLayer.getUserByUsername(user.username);
     delete result[0].password;
-    
+    logger.info("Account created for user: "+result.first_name)
     response.status(201).json(result);
 
     }catch(error){
-
+        logger.error(error)
         setError(error, response.status(400))
 
     }
