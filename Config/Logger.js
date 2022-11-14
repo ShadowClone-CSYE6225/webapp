@@ -1,35 +1,58 @@
 const { path } = require('app-root-path');
-const dotenv = require('dotenv');
-dotenv.config();
-
 const winston = require('winston')
+const { createLogger, format, transports } = require('winston');
+const { combine, splat, timestamp, printf } = format;
+
+
+
+const myFormat = printf( ({ level, message, timestamp}) => {
+    let msg = `${timestamp} [${level}] : ${message} `
+    return msg
+  });
 
 
 const options = {
     file: {
-      level: 'info',
-      filename: `${path}/logs/Application.log`,
+    'timestamp': true,
+      level: 0,
+      filename: `${path}\\logs\\Application.log`,
       handleExceptions: true,
       json: true,
       maxsize: 1048576, // 1MB
       maxFiles: 5,
       colorize: false,
+      
     },
+    error: {
+        level: 'error',
+        filename: `${path}\\logs\\Application.log`,
+        handleExceptions: true,
+        json: true,
+        maxsize: 1048576, // 1MB
+        maxFiles: 5,
+        colorize: true,
+      },
     console: {
+    filename: `${path}\\logs\\Application.log`,
       level: 'debug',
       handleExceptions: true,
-      json: false,
+      json: true,
       colorize: true,
     },
   };
 
 
 
-const logger = new winston.createLogger({
-        format: winston.format.json(),
+const logger = winston.createLogger({
+    format: combine(
+        splat(),
+        timestamp(),
+        myFormat
+      ),
         transports: [
             new winston.transports.File(options.file),
-            new winston.transports.File(options.console)
+            new winston.transports.File(options.console),
+            new winston.transports.File(options.error)
        ],
        exitOnError: false
     });
@@ -37,7 +60,6 @@ const logger = new winston.createLogger({
 
     logger.stream = {
         write: function(message, encoding) {
-
           logger.info(message);
         },
       }; 

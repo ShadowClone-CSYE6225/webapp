@@ -18,7 +18,7 @@ const setError = (error, response) => {
 const getHealthz = async (request, response, next) =>{
     try{
         const health =await serviceLayer.getHealthzDetails();
-        logger.log('info: Health Check working fine.', health);   
+        logger.info('Health Check working fine.', health);   
         
         setSuccess(health, response); 
     }catch(error){
@@ -35,6 +35,7 @@ const createAccount = async (request, response)=>{
 
     // Validate user input
     if (!(user.username && user.password && user.first_name && user.last_name)) {
+        logger.error("Some inputs missing in the request", user)
         response.status(400).send("All inputs are required");
         return;
     }
@@ -42,7 +43,7 @@ const createAccount = async (request, response)=>{
     // check if user already exist return error with response code
     const isUserPresent = await serviceLayer.getUserByUsername(user.username);
     if(isUserPresent.length > 0){
-        logger.error("Email id Already used: ", user.username)
+        logger.debug("Email id Already used: ", user.username)
         response.status(400).json("Email id already registered!");
         return;
     }
@@ -52,7 +53,7 @@ const createAccount = async (request, response)=>{
     await serviceLayer.createNewAccount(user);
     const result = await serviceLayer.getUserByUsername(user.username);
     delete result[0].password;
-    logger.info("Account created for user: "+result.first_name)
+    logger.info("Account created for user: "+result[0].first_name)
     response.status(201).json(result);
 
     }catch(error){
