@@ -2,6 +2,9 @@ const { path } = require('app-root-path');
 const winston = require('winston')
 const { createLogger, format, transports } = require('winston');
 const { combine, splat, timestamp, printf } = format;
+const dotenv = require('dotenv');
+dotenv.config();
+
 
 
 
@@ -15,7 +18,7 @@ const options = {
     file: {
     'timestamp': true,
       level: 0,
-      filename: `${path}\\logs\\Application.log`,
+      filename: process.env.System ? `${path}\\logs\\Application.log`:`${path}/logs/Application.log`,
       handleExceptions: true,
       json: true,
       maxsize: 1048576, // 1MB
