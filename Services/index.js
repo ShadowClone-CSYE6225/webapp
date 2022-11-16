@@ -12,6 +12,7 @@ const dynamoDatabase = new aws.DynamoDB({
     region: process.env.AWS_REGION || 'us-east-1'
 });
 
+const dynamoDB = new aws.DynamoDB.DocumentClient({ region: "us-east-1" })
 
 module.exports.getHealthzDetails = function getHealthzDetails(){
     return 'Hello from Server side.'
@@ -24,6 +25,8 @@ module.exports.createNewAccount = async function createNewAccount(newUser){
     newUser.password =  await bcrypt.hash(newUser.password, 2);
     
     const result = await databaseModel.createQuery(newUser);
+
+
     if(result.rowCount === 1) {
         const newResult = await databaseModel.getQueryByUsername(newUser.username);  
         const result = newResult.rows;
@@ -33,23 +36,38 @@ module.exports.createNewAccount = async function createNewAccount(newUser){
         const token = uuidv4();
         const expiryTime = new Date().getTime();
 
-        const item = {
-            TableName: 'csye6225UserToken',
-            Item: {
-                'Email': {
-                    S: result[0].username
-                },
-                'TokenName': {
-                    S: token
-                },
-                'TimeToLive': {
-                    N: expiryTime.toString()
-                }
-            }
-        };
+        // const item = {
+        //     TableName: 'csye6225UserToken',
+        //     Item: {
+        //         Email: `${result[0].username}`,
+        //         TokenName: `${token}`,
+        //         TimeToLive:expiryTime.toString()
+        //         },
+        //         ReturnValues: 'ALL_OLD'
+        // }
+            
+        // };
 
         try {
-            const data = await dynamoDatabase.putItem(item).promise();
+
+            dynamoDB.put({
+                Item: {
+                    Email: `${result[0].username}`,
+                    TokenName: `${token}`,
+                    TimeToLive:expiryTime.toString()
+                    },
+                    ReturnValues: 'ALL_OLD',
+                TableName: "csye6225UserToken"
+
+            }).promise()
+
+
+
+            // const data = await dynamoDatabase.putItem(item, (error, data)=>{
+            //     if(error) logger.error(error);
+            //     console.log(data);
+            // }, 4000) 
+            
             logger.info("Token stored successfully", data);
 
             const message = {
@@ -60,19 +78,17 @@ module.exports.createNewAccount = async function createNewAccount(newUser){
             const params = {
                 Message: JSON.stringify(message),
                 Subject: token,
-                TopicArn: 'arn:aws:sns:us-east-1:708443089169:MyTopic.fifo'
+                TopicArn: 'arn:aws:sns:us-east-1:708443089169:Email_Verification'
             }
 
             const publishTextToPromise = await sns.publish(params).promise();
-
-            console.log(publishTextToPromise);
         } catch (error) {
             logger.error("Error in DynamoDB",error)
         }
 
         return newUser
-    }
     
+    }
 
 }
 
