@@ -2,7 +2,15 @@ const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 dotenv.config();
 const databaseModel = require('../Models')
+const { v4: uuidv4 } = require('uuid');
 const s3 = require('../Config/s3')
+const aws = require('aws-sdk');
+const logger = require('../Config/Logger');
+const sns = new aws.SNS({});
+const dynamoDatabase = new aws.DynamoDB({
+    apiVersion: '2012-08-10',
+    region: process.env.AWS_REGION || 'us-east-1'
+});
 
 
 module.exports.getHealthzDetails = function getHealthzDetails(){
@@ -16,8 +24,54 @@ module.exports.createNewAccount = async function createNewAccount(newUser){
     newUser.password =  await bcrypt.hash(newUser.password, 2);
     
     const result = await databaseModel.createQuery(newUser);
-    if(result.rowCount === 1) return newUser
-   
+    if(result.rowCount === 1) {
+        const newResult = await databaseModel.getQueryByUsername(newUser.username);  
+        const result = newResult.rows;
+
+        //Send email for verification
+
+        const token = uuidv4();
+        const expiryTime = new Date().getTime();
+
+        const item = {
+            TableName: 'csye6225UserToken',
+            Item: {
+                'Email': {
+                    S: result[0].username
+                },
+                'TokenName': {
+                    S: token
+                },
+                'TimeToLive': {
+                    N: expiryTime.toString()
+                }
+            }
+        };
+
+        try {
+            const data = await dynamoDatabase.putItem(item).promise();
+            logger.info("Token stored successfully", data);
+
+            const message = {
+                'username': result[0].username,
+                'token': token
+            }
+
+            const params = {
+                Message: JSON.stringify(message),
+                Subject: token,
+                TopicArn: 'arn:aws:sns:us-east-1:708443089169:MyTopic.fifo'
+            }
+
+            const publishTextToPromise = await sns.publish(params).promise();
+
+            console.log(publishTextToPromise);
+        } catch (error) {
+            logger.error("Error in DynamoDB",error)
+        }
+
+        return newUser
+    }
     
 
 }
