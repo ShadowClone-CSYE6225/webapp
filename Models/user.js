@@ -1,4 +1,4 @@
-const {Sequelize, DataTypes} = require("sequelize");
+const {Sequelize, DataTypes, BOOLEAN} = require("sequelize");
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -41,6 +41,10 @@ const Data = new Date();
     username: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    verified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     },
     account_created: {
         type: 'TIMESTAMP',
