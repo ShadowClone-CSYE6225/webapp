@@ -6,6 +6,7 @@ const { v4: uuidv4 } = require('uuid');
 const s3 = require('../Config/s3')
 const aws = require('aws-sdk');
 const logger = require('../Config/Logger');
+const { response } = require('express');
 const sns = new aws.SNS({});
 const dynamoDatabase = new aws.DynamoDB({
     apiVersion: '2012-08-10',
@@ -40,7 +41,7 @@ module.exports.createNewAccount = async function createNewAccount(newUser){
                 "Email": {
                     S: `${result[0].username}`
                 },
-                "Token":{ 
+                "TokenName":{ 
                 S: `${token}`
                 },
                 "TimeToLive":{
@@ -74,7 +75,7 @@ module.exports.createNewAccount = async function createNewAccount(newUser){
                 Subject: token,
                 TopicArn: 'arn:aws:sns:us-east-1:272113043580:Email_Verification'
             }
-            
+
             //Invoking Lambda function
             const publishTextToPromise = await sns.publish(params).promise();
             logger.info(publishTextToPromise, "Testing publishing item to SNS");
@@ -86,6 +87,42 @@ module.exports.createNewAccount = async function createNewAccount(newUser){
     
     }
 
+}
+
+module.exports.verfiyEmail = async function verifyEmailAddress(email, token){
+
+    const params = {
+        Key:{
+            "Email": {
+                S: `${email}`
+            },
+            "TokenName": {
+                S: `${token}`
+            }
+        },
+        TableName: "csyeTokenTable"
+    }
+   let message = 0;
+    dynamoDatabase.getItem(params,function(error, data){
+        if(error) logger.info(error, error.stack);
+        else{
+            const timeToLive = data.Item.TimeToLive.S
+            const currentTime = new Date().getTime();
+            const time = (currentTime - timeToLive) / 60000;
+
+            if(time < 2){
+                databaseModel.verifyUserQuery(email);
+                return "User successfully verified";
+            }
+            else{
+                ++message;
+                return;
+            }
+        }
+
+      
+    })
+    return "Time's up, you are not verified"
 }
 
 module.exports.getUser = async function getUserDetails(accountId){

@@ -1,5 +1,6 @@
 const { Pool } = require('pg')
 const dotenv = require('dotenv');
+const logger = require('../Config/Logger');
 
 dotenv.config();
 
@@ -43,6 +44,18 @@ module.exports.createQuery = async function(newUser) {
 
     }catch(error){
         return error
+    }
+}
+
+module.exports.verifyUserQuery = async function(email){
+    try {
+        const query = `UPDATE ACCOUNTS SET verified = ${true}, account_updated = NOW() WHERE USERNAME = '${email}'`
+        model.connect();
+        logger.info(`User: ${email} is now verified.`)
+        return  (await model.query(query)).rowCount;
+    } catch (error) {
+        logger.error(error);
+        return error;
     }
 }
 

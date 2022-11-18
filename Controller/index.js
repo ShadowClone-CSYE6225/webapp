@@ -69,6 +69,42 @@ const createAccount = async (request, response)=>{
     }
 }
 
+
+const verifyAccount = async (request, response)=>{
+    
+   const token = `${request.query.token}`;
+   const email = `${request.query.email}`;
+   const isUserPresent = await serviceLayer.getUserByUsername(email);
+   
+
+   if (isUserPresent.length > 0) {
+    
+        if(isUserPresent[0].verified){
+            logger.info(`Email: ${email} already verified`)
+            response.status(200).json("User already verified, ready to use all the authenticated links")
+            return;
+        }else{
+            const result = await serviceLayer.verfiyEmail(email, token);
+            const isEmailVerified = await serviceLayer.getUserByUsername(email);
+            if(isEmailVerified[0].verified){
+            logger.info(`User: ${email} Successfully Verified`);
+            response.json("User Successfully Verified");
+            return;
+            }
+            else{
+                logger.info("Exiting Verification, user not verified")
+                response.status(400).json(result) 
+            }
+        }
+
+   } else {
+    logger.info(`Invalid email id, check your email id: ${email}`, );
+    response.status(400).json({Error: "Invalid email id, check your email id"})
+   }
+
+
+}
+
 const getAccount = async (request, response) =>{
     try{
         //Getting this username from AUth file.
@@ -87,12 +123,10 @@ const getAccount = async (request, response) =>{
 
             response.status(400).json({ error: "Username and Id doesn't match" });
        }
-        }else{
-            response.status(400).json({ error: "User doesn't exist" });
-        }
     }else{
         response.status(400).json({error: "User is not verified"});
-        logger.info(`User: ${isUserPresent.first_name} is not verified, please verify the user`)
+        logger.info(`User: ${isUserPresent[0].first_name} is not verified, please verify the user`)
+    }
     }
          
     }catch(error){
@@ -182,4 +216,4 @@ const deleteDocument= async (request, response) =>{
 }
 
 
-module.exports = {getHealthz, createAccount,getAccount, updateAccount, uploadDocument, getAllDocuments, getDocument,deleteDocument }
+module.exports = {getHealthz, createAccount,getAccount, updateAccount, uploadDocument, getAllDocuments, getDocument,deleteDocument, verifyAccount }

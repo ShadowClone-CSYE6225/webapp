@@ -1,4 +1,4 @@
-const {getHealthz, createAccount,getAccount, updateAccount, uploadDocument, getAllDocuments, getDocument, deleteDocument } =  require('../Controller')
+const {getHealthz, createAccount,getAccount, updateAccount, uploadDocument, getAllDocuments, getDocument, deleteDocument, verifyAccount } =  require('../Controller')
 
 const express = require("express");
 const upload = require('../Middelware/multer');
@@ -19,6 +19,7 @@ app.get('/v1/documents/:documentId', auth, getDocument)
 app.post('/v1/documents/', upload.single('test'), auth, uploadDocument)
 app.delete('/v1/documents/:documentId', auth, deleteDocument)
 app.get('/v1/documents/', auth, getAllDocuments)
+app.get('/v1/verifyUserEmail/', verifyAccount)
 
 
 }
