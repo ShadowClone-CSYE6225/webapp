@@ -26,7 +26,7 @@ source "amazon-ebs" "ubuntu" {
 }
 
 build {
-  name = "learn-packer"
+  name = "New-learn-packer"
   sources = [
     "source.amazon-ebs.ubuntu"
   ]
