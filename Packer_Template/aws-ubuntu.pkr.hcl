@@ -12,7 +12,7 @@ locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
 
 source "amazon-ebs" "ubuntu" {
   ami_name      = "learn-packer-linux-aws_${local.timestamp}"
-  ami_users = ["272113043580"]
+  ami_users     = ["272113043580"]
   instance_type = "t2.micro"
   region        = "us-east-1"
   source_ami_filter {
@@ -35,7 +35,7 @@ build {
   ]
 
   provisioner "file" {
-    source      = "./webapp.zip"
+    source      = "../webapp.zip"
     destination = "/tmp/webapp.zip"
   }
 
@@ -57,6 +57,7 @@ build {
       "cd ~/Application",
       "unzip webapp.zip -d webapp",
       "cd webapp",
+      "cd webapp-main",
       "ls",
       "npm install",
       "sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/home/ubuntu/Application/webapp/Config/CloudWatchAgent.json",
@@ -72,12 +73,13 @@ build {
   }
 
   post-processor "manifest" {
-    output     = "packer_manifest.json"
+    output = "manifest.json"
     strip_path = true
     custom_data = {
-      data =  "Test Data"
+      my_custom_data = "example"
     }
-  }
+}
+
 }
 
 
