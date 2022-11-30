@@ -59,8 +59,10 @@ jobs:
       
       - name: Get ID
         run: |
-            echo "Test_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)" >> $GITHUB_ENV
-            echo $Test_ID
+            AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
+            echo $AMI_ID
+
+
 
 
       
