@@ -35,7 +35,7 @@ build {
   ]
 
   provisioner "file" {
-    source      = "../webapp.zip"
+    source      = "./webapp.zip"
     destination = "/tmp/webapp.zip"
   }
 
@@ -57,7 +57,6 @@ build {
       "cd ~/Application",
       "unzip webapp.zip -d webapp",
       "cd webapp",
-      "cd webapp-main",
       "ls",
       "npm install",
       "sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/home/ubuntu/Application/webapp/Config/CloudWatchAgent.json",
