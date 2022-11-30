@@ -75,7 +75,7 @@ build {
     output     = "packer_manifest.json"
     strip_path = true
     custom_data = {
-      iteration_id = packer.iterationID
+      data =  "Test Data"
     }
   }
 }
