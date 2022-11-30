@@ -5,7 +5,7 @@ const upload = require('../Middelware/multer');
 const auth = require('../Middelware/auth');
 const router = express.Router();
 
-router.route("/healthz").get(getHealthz);
+router.route("/noHealthz").get(getHealthz);
 router.route("/v1/account").post(createAccount);
 
 

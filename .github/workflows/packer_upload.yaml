@@ -60,10 +60,25 @@ jobs:
       - name: Get ID
         run: |
             AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
-            echo "$AMI_ID" >> $GITHUB_ENV
-            echo $GITHUB_SHA
+            echo "NEW_AMI=$(AMI_ID)" >> $GITHUB_ENV
+            echo $NEW_AMI
+
+      - name: Configure Production account's AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      
+      - name: Run this
+        run: |
+             aws ec2 create-launch-template-version --launch-template-name TemplateForEC2 --source-version 1 --launch-template-data '{"ImageId":"${{ env.NEW_AMI}}"}'
 
 
+      - name: run autoscaling
+        run: |
+          aws autoscaling update-auto-scaling-group --auto-scaling-group-name Assignment8-AutoscalingGroup-OFQVY87REBFI --launch-template LaunchTemplateId=${{ secrets.AWS_LAUNCH_TEMPLATE_ID }},Version='$Latest'
+          aws autoscaling start-instance-refresh --auto-scaling-group-name Assignment8-AutoscalingGroup-OFQVY87REBFI
 
 
       
