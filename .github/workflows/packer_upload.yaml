@@ -62,10 +62,9 @@ jobs:
       - name: Test
         run: echo $AMI_ID
       
-      - name: Get HCP Packer Iteration ID from Packer Manifest
-        id: hcp
+      - name: Get ID
         run: |
-            echo "AMI_ID=$(jq -r '.builds[-1].artifact_id' packer_manifest.json | cut -d ":" -f2)" >> $GITHUB_EN
+            echo "AMI_ID=$(jq -r '.builds[-1].artifact_id' packer_manifest.json | cut -d ":" -f2)" >> $GITHUB_ENV
             echo $AMI_ID
 
 
