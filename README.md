@@ -44,3 +44,19 @@ In this assignment we are building secured and public urls to create, fetch, upd
 
 # Assignment 3
 
+# Assignment 4
+
+# Assignment 5
+
+# Assignment 6
+
+# Assignment 7
+
+# Assignment 8
+
+# Assignment 9
+
+Command to upload SSL certificate to Load Balancer to use.
+````
+ aws acm import-certificate --certificate fileb://Certificate.pem --certificate-chain fileb://CertificateChain.pem --private-key fileb://PrivateKey.pem 	
+````
