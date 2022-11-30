@@ -55,4 +55,9 @@ jobs:
           target: ${{ github.workspace }}/Packer_Template/aws-ubuntu.pkr.hcl
         env:
           PACKER_LOG: 1
+      
+      - name: Set env
+        run: echo "AMI_ID=$(echo $AMI_ID | cut -c 1-6)" >> $GITHUB_ENV
+      - name: Test
+        run: echo $GITHUB_SHA_SHORT
         
