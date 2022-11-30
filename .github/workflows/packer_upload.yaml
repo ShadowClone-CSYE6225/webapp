@@ -56,15 +56,10 @@ jobs:
         env:
           PACKER_LOG: 1
       
-      - name: Set env
-        run: echo "AMI_ID=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
-
-      - name: Test
-        run: echo $AMI_ID
       
       - name: Get ID
         run: |
-            echo "Test_ID=$(jq -r '.builds[-1].artifact_id' packer_manifest.json | cut -d ":" -f2)" >> $GITHUB_ENV
+            echo "Test_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)" >> $GITHUB_ENV
             echo $Test_ID
 
 
