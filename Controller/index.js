@@ -184,12 +184,37 @@ const updateAccount = async(request, response)=>{
 
 const uploadDocument= async(request, response)=>{
     try{
-    if(!request.file){
-        response.status(400).json({error: "Please select a file to upload"});
-    }
-    const result = await (serviceLayer.uploadDocument(request.file, request.username));
 
-    response.status(201).json(result);
+         //Getting this username from AUth file.
+         const username = request.username;
+
+
+         const isUserPresent = await serviceLayer.getUserByUsername(username);
+         if(isUserPresent.length !==0){
+           const isAuthenticated = username === isUserPresent[0].username; 
+           const isVerified = isUserPresent[0].verified;
+ 
+           if(isVerified){
+            
+                if(isAuthenticated){
+
+                    if(!request.file){
+                        response.status(400).json({error: "Please select a file to upload"});
+                    }
+
+                    const result = await (serviceLayer.uploadDocument(request.file, request.username));
+        
+                    response.status(201).json(result);
+
+                }
+
+           }else{
+            response.status(400).json({error: "User is not verified"});
+            logger.info(`User: ${isUserPresent.first_name} is not verified, please verify the user`)
+           }
+        }
+
+    
 }catch(error){
     response.status(400)
 }
@@ -198,20 +223,116 @@ const uploadDocument= async(request, response)=>{
 
 const getAllDocuments = async (request, response) =>{
 
-    const result = await(serviceLayer.getAllDocuments(request.username));
-    response.status(200).json(result);
+
+
+    try {
+
+
+            //Getting this username from AUth file.
+    const username = request.username;
+
+
+    const isUserPresent = await serviceLayer.getUserByUsername(username);
+    if(isUserPresent.length !==0){
+      const isAuthenticated = username === isUserPresent[0].username; 
+      const isVerified = isUserPresent[0].verified;
+
+      if(isVerified){
+
+            if(isAuthenticated){
+                const result = await(serviceLayer.getAllDocuments(request.username));
+                response.status(200).json(result);
+            }
+        }else{
+            response.status(400).json({error: "User is not verified"});
+            logger.info(`User: ${isUserPresent.first_name} is not verified, please verify the user`)
+        }
+
+    
+    }
+        
+    } catch (error) {
+        response.status(400).json(error)
+    }
+    
 }
 
 const getDocument = async (request,response) =>{
 
-    const result = await(serviceLayer.getDocument(request.params.documentId, request.username));
+    
+
+
+
+    try {
+
+
+        //Getting this username from AUth file.
+const username = request.username;
+
+
+const isUserPresent = await serviceLayer.getUserByUsername(username);
+if(isUserPresent.length !==0){
+  const isAuthenticated = username === isUserPresent[0].username; 
+  const isVerified = isUserPresent[0].verified;
+
+  if(isVerified){
+
+        if(isAuthenticated){
+            const result = await(serviceLayer.getDocument(request.params.documentId, username));
     response.status(200).json(result);
+        }
+    }else{
+        response.status(400).json({error: "User is not verified"});
+        logger.info(`User: ${isUserPresent.first_name} is not verified, please verify the user`)
+    }
+
+
+}
+    
+} catch (error) {
+    response.status(400).json(error)
+}
 
 }
 
 const deleteDocument= async (request, response) =>{
-    const result = await(serviceLayer.deleteDocument(request.params.documentId, request.username));
-    response.status(201).json(result);
+    
+
+
+
+
+    
+
+
+    try {
+
+
+        //Getting this username from AUth file.
+const username = request.username;
+
+
+const isUserPresent = await serviceLayer.getUserByUsername(username);
+if(isUserPresent.length !==0){
+  const isAuthenticated = username === isUserPresent[0].username; 
+  const isVerified = isUserPresent[0].verified;
+
+  if(isVerified){
+
+        if(isAuthenticated){
+            const result = await(serviceLayer.deleteDocument(request.params.documentId, request.username));
+            response.status(201).json(result);
+        }
+    }else{
+        response.status(400).json({error: "User is not verified"});
+        logger.info(`User: ${isUserPresent.first_name} is not verified, please verify the user`)
+    }
+
+
+}
+    
+} catch (error) {
+    response.status(400).json(error)
+}
 
 }
 
