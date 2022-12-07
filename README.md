@@ -12,6 +12,13 @@ More details will be added as course progresses.
    ````
    node -v
    ````
+3. For the last assignment, you need to upload SSL certificate to AWS CM(Certificate Manager). But to get a certificate we need to do few steps.
+   a. Please install openSSL on Windows(It is not required on Mac and Unix Machines)
+   After that, run below command.
+   ````
+   openssl.exe req -new -newkey rsa:2048 -nodes -keyout C:\TestFolder\NewServer.key -out C:\TestFolder\NewServer_csr.txt
+   ````
+   
 # Build and Run
 1. Clone the github repository on your local machine.
 2. You need to install Postgres database to run the application.
@@ -60,3 +67,4 @@ Command to upload SSL certificate to Load Balancer to use.
 ````
  aws acm import-certificate --certificate fileb://Certificate.pem --certificate-chain fileb://CertificateChain.pem --private-key fileb://PrivateKey.pem 	
 ````
+

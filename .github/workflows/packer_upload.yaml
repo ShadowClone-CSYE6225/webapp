@@ -76,8 +76,8 @@ jobs:
 
       - name: run autoscaling
         run: |
-          aws autoscaling update-auto-scaling-group --auto-scaling-group-name Assignment8-AutoscalingGroup-OFQVY87REBFI --launch-template LaunchTemplateId=${{ secrets.AWS_LAUNCH_TEMPLATE_ID }},Version='$Latest'
-          aws autoscaling start-instance-refresh --auto-scaling-group-name Assignment8-AutoscalingGroup-OFQVY87REBFI
+          aws autoscaling update-auto-scaling-group --auto-scaling-group-name Assignment9-AutoscalingGroup-14GHA2A1FANXQ --launch-template LaunchTemplateId=${{ secrets.AWS_LAUNCH_TEMPLATE_ID }},Version='$Latest'
+          aws autoscaling start-instance-refresh --auto-scaling-group-name Assignment9-AutoscalingGroup-14GHA2A1FANXQ
 
 
       

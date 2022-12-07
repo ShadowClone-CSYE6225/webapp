@@ -6,7 +6,7 @@ const auth = require('../Middelware/auth');
 const router = express.Router();
 
 router.route("/healthz").get(getHealthz);
-router.route("/v1/account").post(createAccount);
+router.route("/v2/account").post(createAccount);
 
 
 module.exports= function(app) {
@@ -15,7 +15,7 @@ app.use('/', router)
 //Below routes are authenticated with BASIC authentication
 app.get('/v2/account/:accountId', auth, getAccount);
 app.put('/v1/account/:accountId', auth, updateAccount)
-app.get('/v1/documents/:documentId', auth, getDocument)
+app.get('/v2/documents/:documentId', auth, getDocument)
 app.post('/v1/documents/', upload.single('test'), auth, uploadDocument)
 app.delete('/v1/documents/:documentId', auth, deleteDocument)
 app.get('/v1/documents/', auth, getAllDocuments)
