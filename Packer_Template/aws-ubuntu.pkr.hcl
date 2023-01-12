@@ -12,7 +12,7 @@ locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
 
 source "amazon-ebs" "ubuntu" {
   ami_name      = "learn-packer-linux-aws_${local.timestamp}"
-  ami_users     = ["272113043580"]
+  ami_users     = [""]
   instance_type = "t2.micro"
   region        = "us-east-1"
   source_ami_filter {
